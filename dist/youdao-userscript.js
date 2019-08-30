@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         优化有道云笔记网页版
+// @name         优化有道云笔记增强
 // @namespace    rollup-react
 // @version      0.0.3
 // @description  优化有道云笔记网页版

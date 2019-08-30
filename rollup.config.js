@@ -11,7 +11,7 @@ export default {
     file: 'dist/youdao-userscript.js',
     format: 'cjs',
     banner: '// ==UserScript==\n' +
-      '// @name         ' + pkg.description + '\n' +
+      '// @name         ' + pkg.toolName + '\n' +
       '// @namespace    rollup-react\n' +
       '// @version      ' + pkg.version + '\n' +
       '// @description  ' + pkg.description + '\n' +
