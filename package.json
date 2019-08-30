@@ -1,6 +1,6 @@
 {
   "name": "youdao-note-optimizer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "优化有道云笔记网页版",
   "main": "dist/youdao-userscript.js",
   "scripts": {
