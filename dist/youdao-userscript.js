@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         优化有道云笔记增强
 // @namespace    rollup-react
-// @version      0.0.3
+// @version      0.0.4
 // @description  优化有道云笔记网页版
 // @author       sunrui
 // @include     https://note.youdao.com/web/*
