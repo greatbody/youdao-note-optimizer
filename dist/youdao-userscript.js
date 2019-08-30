@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youdao-note-optimizer
 // @namespace    rollup-react
-// @version      0.0.1
+// @version      0.0.2
 // @description  优化有道云笔记网页版
 // @author       sunrui
 // @include     https://note.youdao.com/web/*
