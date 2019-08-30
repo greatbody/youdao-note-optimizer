@@ -1,0 +1,36 @@
+{
+  "name": "youdao-note-optimizer",
+  "version": "0.0.1",
+  "description": "优化有道云笔记网页版",
+  "main": "dist/youdao-userscript.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "chrome",
+    "extention"
+  ],
+  "author": "sunrui",
+  "license": "MIT",
+  "bugs": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "d": "^1.0.0",
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "rollup": "^1.20.3",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^8.4.0",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-replace": "^2.0.0"
+  }
+}
