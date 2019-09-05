@@ -1,8 +1,8 @@
-import expandMoveList from './lib/expandMoveList';
+import MoveListExpander from './lib/MoveListExpander';
 
-class Win {
+class Runner {
   run = () => {
-    expandMoveList();
+    new MoveListExpander().runWithInterval(1000);
   }
 }
 
@@ -10,7 +10,7 @@ class Win {
 (function () {
   // eslint-disable-next-line
   'use strict';
-  const w = new Win();
-  w.run();
+  const runner = new Runner();
+  runner.run();
   // eslint-disable-next-line
 }());

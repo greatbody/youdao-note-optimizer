@@ -1,8 +1,9 @@
 /* eslint-disable no-restricted-properties */
 
-class Do {
-  static inputDom;
-  static insertInputBox = () => {
+class MoveListExpander {
+  inputDom;
+
+  insertInputBox = () => {
     const parentDom = document.querySelector('.file-selector-bd');
     const refDom = document.querySelector('.bd-selector-path');
     if (document.querySelectorAll('.tampermonkey-search').length > 0 || !parentDom || !refDom) return;
@@ -13,35 +14,35 @@ class Do {
     input.style.width = '100%';
     input.style.padding = '0';
     input.className = 'tampermonkey-search';
-    input.onkeyup = Do.handleKeyUp;
+    input.onkeyup = this.handleKeyUp;
     parentDom.insertBefore(input, refDom);
-    Do.inputDom = input;
+    this.inputDom = input;
   }
 
-  static runWithInterval = (interval) => {
+  runWithInterval = (interval) => {
     setTimeout(() => {
-      Do.insertInputBox();
+      this.insertInputBox();
       const expandableDoms = document.querySelectorAll('.file-selector-bd div.expandable:not(.expanded) > div.toggle');
-      if (Do.inputDom) {
-        Do.searchInDom(Do.inputDom.value);
+      if (this.inputDom) {
+        this.searchInDom(this.inputDom.value);
       }
       if (expandableDoms.length > 0) {
         expandableDoms.forEach((v) => {
           v.click();
         });
-        Do.runWithInterval(500);
+        this.runWithInterval(500);
       } else {
-        Do.runWithInterval(3000);
+        this.runWithInterval(3000);
       }
     }, interval);
   };
 
-  static handleKeyUp = (e) => {
+  handleKeyUp = (e) => {
     const input = e.currentTarget.value.toLowerCase();
-    Do.searchInDom(input);
+    this.searchInDom(input);
   }
 
-  static searchInDom = (searchWord) => {
+  searchInDom = (searchWord) => {
     const allLeaves = document.querySelectorAll('.file-selector-bd div.tree-title');
     allLeaves.forEach((leaf) => {
       if (leaf.innerText && leaf.innerText.toLowerCase().indexOf(searchWord) >= 0) {
@@ -53,4 +54,4 @@ class Do {
   }
 }
 
-export default Do.runWithInterval;
+export default MoveListExpander;
