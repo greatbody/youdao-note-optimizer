@@ -1,8 +1,10 @@
 import MoveListExpander from './lib/MoveListExpander';
+import MarkdownViewerPlugin from './lib/MarkdownViewerPlugin';
 
 class Runner {
   run = () => {
     new MoveListExpander().runWithInterval(1000);
+    new MarkdownViewerPlugin().detect();
   }
 }
 

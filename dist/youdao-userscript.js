@@ -81,11 +81,82 @@ var MoveListExpander = function MoveListExpander() {
   console.log('移动笔记增强功能已启动.');
 };
 
+var MarkdownViewerPlugin = function MarkdownViewerPlugin() {
+  var _this = this;
+
+  classCallCheck(this, MarkdownViewerPlugin);
+  this.active = false;
+  this.iframe = null;
+
+  this.handleIframeOnload = function () {
+    var iframe = document.querySelector('#mdEditor');
+    document.querySelector('.content-container .loading-style').setAttribute('hidden', null);
+    iframe.removeAttribute('hidden');
+  };
+
+  this.switchToView = function () {
+    var iframe = document.querySelector('#mdEditor');
+    iframe.setAttribute('hidden', null);
+    iframe.src = iframe.src;
+    document.querySelector('.content-container .loading-style').removeAttribute('hidden');
+    if (!iframe.onload) {
+      iframe.onload = _this.handleIframeOnload;
+    }
+  };
+
+  this.insertViewButton = function () {
+    var parentDom = document.querySelector('.file-detail .hd');
+    var refDom = document.querySelector('.file-detail .btn-wrap');
+    if (!parentDom || !refDom) {
+      return;
+    }
+    if (document.querySelectorAll('.tampermonkey-view').length > 0 || !parentDom || !refDom) return;
+    var btnSwitchToView = document.createElement('div');
+    btnSwitchToView.innerText = '查看';
+    btnSwitchToView.className = 'hd-btn tampermonkey-view';
+    btnSwitchToView.onclick = _this.switchToView;
+    parentDom.insertBefore(btnSwitchToView, refDom);
+  };
+
+  this.removeButton = function () {
+    document.querySelectorAll('.tampermonkey-view').forEach(function (button) {
+      button.remove();
+    });
+  };
+
+  this.detect = function () {
+    _this.iframe = document.querySelector('#mdEditor');
+    var currentActive = _this.iframe != null;
+    if (!_this.active && currentActive) {
+      console.log('检测到markdonw编辑状态');
+    }
+    if (_this.active && !currentActive) {
+      console.log('退出markdonw编辑状态');
+    }
+    _this.active = currentActive;
+    if (_this.active) {
+      // 检测当前是不是编辑状态
+      var iframeDoc = _this.iframe.contentDocument;
+      if (iframeDoc && iframeDoc.querySelector('body') && iframeDoc.querySelector('body').getAttribute('data-mode') === 'edit') {
+        _this.insertViewButton();
+      } else {
+        _this.removeButton();
+      }
+    }
+    setTimeout(function () {
+      _this.detect();
+    }, 300);
+  };
+
+  console.log('Markdown增强插件启动.');
+};
+
 var Runner = function Runner() {
   classCallCheck(this, Runner);
 
   this.run = function () {
     new MoveListExpander().runWithInterval(1000);
+    new MarkdownViewerPlugin().detect();
   };
 };
 
