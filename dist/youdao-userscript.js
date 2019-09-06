@@ -77,6 +77,8 @@ var MoveListExpander = function MoveListExpander() {
       }
     });
   };
+
+  console.log('移动笔记增强功能已启动.');
 };
 
 var Runner = function Runner() {

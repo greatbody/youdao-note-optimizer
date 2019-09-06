@@ -3,6 +3,10 @@
 class MoveListExpander {
   inputDom;
 
+  constructor() {
+    console.log('移动笔记增强功能已启动.');
+  }
+
   insertInputBox = () => {
     const parentDom = document.querySelector('.file-selector-bd');
     const refDom = document.querySelector('.bd-selector-path');
