@@ -1,16 +1,12 @@
 import MoveListExpander from './lib/MoveListExpander';
 import MarkdownViewerPlugin from './lib/MarkdownViewerPlugin';
 import EventMng from './shared/EventMng';
+import FakeLoadingEvent from './events/FakeLoadingEvent';
 
 class Runner {
   run = () => {
     const eventMng = new EventMng();
-    eventMng.on('fake-loadding', (note, loading) => {
-      setTimeout(() => {
-        note.removeAttribute('hidden');
-        loading.setAttribute('hidden', null);
-      }, 1000);
-    });
+    eventMng.use(FakeLoadingEvent.new());
     new MoveListExpander().runWithInterval(1000);
     new MarkdownViewerPlugin().detect();
   }

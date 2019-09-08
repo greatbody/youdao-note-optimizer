@@ -1,5 +1,7 @@
 class EventMng {
   stateCallbacks = {}
+  detectors = []
+  plugins = []
   constructor() {
     console.log('状态管理上线...');
     this.monitorState();
@@ -7,27 +9,30 @@ class EventMng {
 
   monitorState = () => {
     setInterval(() => {
-      this.checkCopyPasteIssue();
+      this.detectAll();
     }, 1000);
   }
 
-  on = (state, cb) => {
-    if (this.stateCallbacks[state]) {
-      this.stateCallbacks[state].push(cb);
-    } else {
-      this.stateCallbacks[state] = [cb];
+  detectAll = () => {
+    const dets = this.detectors;
+    for (let i = 0; i < dets.length; i += 1) {
+      const det = dets[i];
+      det(this.trigger);
     }
   }
 
-  checkCopyPasteIssue = () => {
-    const notePoint = document.querySelector('.note-detail .detail-bd');
-    if (!notePoint) return;
-    const loadingGif = document.querySelector('.content-container .loading-style');
-    if (!loadingGif) return;
-    if (notePoint.hasAttribute('hidden') &&
-      !loadingGif.hasAttribute('hidden')
-    ) {
-      this.trigger('fake-loadding', notePoint, loadingGif);
+  on = (eventType, cb) => {
+    if (this.stateCallbacks[eventType]) {
+      this.stateCallbacks[eventType].push(cb);
+    } else {
+      this.stateCallbacks[eventType] = [cb];
+    }
+  }
+
+  use = (eventPlugin) => {
+    if (eventPlugin && eventPlugin.version > 0) {
+      this.on(eventPlugin.eventType, eventPlugin.action);
+      this.detectors.push(eventPlugin.detect);
     }
   }
 

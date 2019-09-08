@@ -1,8 +1,8 @@
 {
   "name": "youdao-note-optimizer",
-  "version": "0.0.5",
-  "toolName": "优化有道云笔记增强",
-  "description": "优化有道云笔记网页版",
+  "version": "0.0.6",
+  "toolName": "有道云笔记增强大师",
+  "description": "有道云笔记网页版的增强优化",
   "main": "dist/youdao-userscript.js",
   "scripts": {
     "build": "rollup -c"

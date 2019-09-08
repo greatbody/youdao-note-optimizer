@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         优化有道云笔记增强
+// @name         有道云笔记增强大师
 // @namespace    rollup-react
-// @version      0.0.5
-// @description  优化有道云笔记网页版
+// @version      0.0.6
+// @description  有道云笔记网页版的增强优化
 // @author       sunrui
 // @include     https://note.youdao.com/web/*
 // @grant       unsafeWindow
@@ -156,28 +156,35 @@ var EventMng = function EventMng() {
 
   classCallCheck(this, EventMng);
   this.stateCallbacks = {};
+  this.detectors = [];
+  this.plugins = [];
 
   this.monitorState = function () {
     setInterval(function () {
-      _this.checkCopyPasteIssue();
+      _this.detectAll();
     }, 1000);
   };
 
-  this.on = function (state, cb) {
-    if (_this.stateCallbacks[state]) {
-      _this.stateCallbacks[state].push(cb);
-    } else {
-      _this.stateCallbacks[state] = [cb];
+  this.detectAll = function () {
+    var dets = _this.detectors;
+    for (var i = 0; i < dets.length; i += 1) {
+      var det = dets[i];
+      det(_this.trigger);
     }
   };
 
-  this.checkCopyPasteIssue = function () {
-    var notePoint = document.querySelector('.note-detail .detail-bd');
-    if (!notePoint) return;
-    var loadingGif = document.querySelector('.content-container .loading-style');
-    if (!loadingGif) return;
-    if (notePoint.hasAttribute('hidden') && !loadingGif.hasAttribute('hidden')) {
-      _this.trigger('fake-loadding', notePoint, loadingGif);
+  this.on = function (eventType, cb) {
+    if (_this.stateCallbacks[eventType]) {
+      _this.stateCallbacks[eventType].push(cb);
+    } else {
+      _this.stateCallbacks[eventType] = [cb];
+    }
+  };
+
+  this.use = function (eventPlugin) {
+    if (eventPlugin && eventPlugin.version > 0) {
+      _this.on(eventPlugin.eventType, eventPlugin.action);
+      _this.detectors.push(eventPlugin.detect);
     }
   };
 
@@ -198,17 +205,43 @@ var EventMng = function EventMng() {
   this.monitorState();
 };
 
+var FakeLoadingEvent = function FakeLoadingEvent() {
+  var _this = this;
+
+  classCallCheck(this, FakeLoadingEvent);
+  this.version = 1;
+  this.eventType = 'fake-loading';
+
+  this.action = function (notePoint, loadingGif) {
+    setTimeout(function () {
+      notePoint.removeAttribute('hidden');
+      loadingGif.setAttribute('hidden', null);
+    }, 2000);
+  };
+
+  this.detect = function (trigger) {
+    var notePoint = document.querySelector('.note-detail .detail-bd');
+    if (!notePoint) return;
+    var loadingGif = document.querySelector('.content-container .loading-style');
+    if (!loadingGif) return;
+    if (notePoint.hasAttribute('hidden') && !loadingGif.hasAttribute('hidden')) {
+      trigger(_this.eventType, notePoint, loadingGif);
+    }
+  };
+
+  console.log('FakeLoadingEvent monitor start..');
+};
+
+FakeLoadingEvent.new = function () {
+  return new FakeLoadingEvent();
+};
+
 var Runner = function Runner() {
   classCallCheck(this, Runner);
 
   this.run = function () {
     var eventMng = new EventMng();
-    eventMng.on('fake-loadding', function (note, loading) {
-      setTimeout(function () {
-        note.removeAttribute('hidden');
-        loading.setAttribute('hidden', null);
-      }, 1000);
-    });
+    eventMng.use(FakeLoadingEvent.new());
     new MoveListExpander().runWithInterval(1000);
     new MarkdownViewerPlugin().detect();
   };
