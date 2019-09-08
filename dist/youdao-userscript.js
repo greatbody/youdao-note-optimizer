@@ -151,10 +151,64 @@ var MarkdownViewerPlugin = function MarkdownViewerPlugin() {
   console.log('Markdown增强插件启动.');
 };
 
+var EventMng = function EventMng() {
+  var _this = this;
+
+  classCallCheck(this, EventMng);
+  this.stateCallbacks = {};
+
+  this.monitorState = function () {
+    setInterval(function () {
+      _this.checkCopyPasteIssue();
+    }, 1000);
+  };
+
+  this.on = function (state, cb) {
+    if (_this.stateCallbacks[state]) {
+      _this.stateCallbacks[state].push(cb);
+    } else {
+      _this.stateCallbacks[state] = [cb];
+    }
+  };
+
+  this.checkCopyPasteIssue = function () {
+    var notePoint = document.querySelector('.note-detail .detail-bd');
+    if (!notePoint) return;
+    var loadingGif = document.querySelector('.content-container .loading-style');
+    if (!loadingGif) return;
+    if (notePoint.hasAttribute('hidden') && !loadingGif.hasAttribute('hidden')) {
+      _this.trigger('fake-loadding', notePoint, loadingGif);
+    }
+  };
+
+  this.trigger = function (stateType) {
+    for (var _len = arguments.length, params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      params[_key - 1] = arguments[_key];
+    }
+
+    console.log('[StateEvent] ' + stateType + ' is triggered.');
+    var callbacks = _this.stateCallbacks[stateType];
+    for (var i = 0; i < callbacks.length; i += 1) {
+      var cb = callbacks[i];
+      cb.apply(undefined, params);
+    }
+  };
+
+  console.log('状态管理上线...');
+  this.monitorState();
+};
+
 var Runner = function Runner() {
   classCallCheck(this, Runner);
 
   this.run = function () {
+    var eventMng = new EventMng();
+    eventMng.on('fake-loadding', function (note, loading) {
+      setTimeout(function () {
+        note.removeAttribute('hidden');
+        loading.setAttribute('hidden', null);
+      }, 1000);
+    });
     new MoveListExpander().runWithInterval(1000);
     new MarkdownViewerPlugin().detect();
   };
