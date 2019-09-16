@@ -152,7 +152,11 @@ var MarkdownViewerPlugin = function MarkdownViewerPlugin() {
 };
 
 var TagPlugin = function TagPlugin() {
+  var _this = this;
+
   classCallCheck(this, TagPlugin);
+  this.currentIndex = -1;
+  this.currentLabel = '';
 
   this.detect = function () {
     setInterval(function () {
@@ -165,6 +169,48 @@ var TagPlugin = function TagPlugin() {
         fileTagCtl.click();
       }
     }, 1000);
+    $(document).delegate('.tag-add-container input', 'keydown', function (event) {
+      var list = document.querySelectorAll('.tag-candidate-list .tag-candidate');
+      if (list[_this.currentIndex] && list[_this.currentIndex].hasAttribute('style')) {
+        list[_this.currentIndex].removeAttribute('style');
+      }
+      switch (event.key) {
+        case 'ArrowDown':
+          if (_this.currentIndex >= list.length - 1) {
+            _this.currentIndex = list.length - 1;
+          } else {
+            _this.currentIndex += 1;
+          }
+          _this.currentLabel = list[_this.currentIndex].getAttribute('title');
+          event.currentTarget.value = _this.currentLabel;
+          break;
+        case 'ArrowUp':
+          if (_this.currentIndex <= 0) {
+            _this.currentIndex = 0;
+          } else {
+            _this.currentIndex -= 1;
+          }
+          _this.currentLabel = list[_this.currentIndex].getAttribute('title');
+          event.currentTarget.value = _this.currentLabel;
+          break;
+        case 'Tab':
+          if (_this.currentIndex < 0) {
+            return;
+          }
+          list[_this.currentIndex].click();
+          event.currentTarget.value = _this.currentLabel;
+          _this.currentIndex = -1;
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+        default:
+          _this.currentIndex = -1;
+          break;
+      }
+      if (list[_this.currentIndex]) {
+        list[_this.currentIndex].setAttribute('style', 'color: #fff;background:#398dee;');
+      }
+    });
   };
 
   console.log('TagPlugin is running.');
