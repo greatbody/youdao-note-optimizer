@@ -151,6 +151,25 @@ var MarkdownViewerPlugin = function MarkdownViewerPlugin() {
   console.log('Markdown增强插件启动.');
 };
 
+var TagPlugin = function TagPlugin() {
+  classCallCheck(this, TagPlugin);
+
+  this.detect = function () {
+    setInterval(function () {
+      var fileTagCtl = document.querySelector('div.tools-item .tag-icon');
+      var fileTags = document.querySelectorAll('.file-tag');
+      if (fileTags.length > 0) {
+        return;
+      }
+      if (fileTagCtl) {
+        fileTagCtl.click();
+      }
+    }, 1000);
+  };
+
+  console.log('TagPlugin is running.');
+};
+
 var EventMng = function EventMng() {
   var _this = this;
 
@@ -244,6 +263,7 @@ var Runner = function Runner() {
     eventMng.use(FakeLoadingEvent.new());
     new MoveListExpander().runWithInterval(1000);
     new MarkdownViewerPlugin().detect();
+    new TagPlugin().detect();
   };
 };
 
