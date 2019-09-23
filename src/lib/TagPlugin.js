@@ -6,6 +6,7 @@ class TagPlugin {
   }
 
   detect = () => {
+    return;
     setInterval(() => {
       const fileTagCtl = document.querySelector('div.tools-item .tag-icon');
       const fileTags = document.querySelectorAll('.file-tag');

@@ -159,6 +159,7 @@ var TagPlugin = function TagPlugin() {
   this.currentLabel = '';
 
   this.detect = function () {
+    return;
     setInterval(function () {
       var fileTagCtl = document.querySelector('div.tools-item .tag-icon');
       var fileTags = document.querySelectorAll('.file-tag');
